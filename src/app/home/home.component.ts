@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, startWith } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -18,6 +18,13 @@ export class HomeComponent implements OnInit {
         return http.get<any>(`${path}${term}`);
       }),
       map(results => results.items)
+    );
+
+    this.repos.subscribe(list => {
+      localStorage['listCache'] = JSON.stringify(list);
+    });
+    this.repos = this.repos.pipe(
+      startWith(JSON.parse(localStorage['listCache'] || '[]'))
     );
   }
 
