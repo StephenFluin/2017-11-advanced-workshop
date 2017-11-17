@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { ServiceWorkerModule, SwPush } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -15,7 +17,20 @@ import { HomeComponent } from './home/home.component';
       { path: 'search/:term', component: HomeComponent },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
     ]),
+    environment.production
+      ? ServiceWorkerModule.register('ngsw-worker.js')
+      : [],
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(injector: Injector) {
+    const swPush = injector.get(SwPush, null);
+    if (swPush) {
+      // swPush.requestSubscription({ serverPublicKey: 'MYKEY' });
+      swPush.messages.subscribe(msg => {
+        console.log('got a push notification', msg);
+      });
+    }
+  }
+}
