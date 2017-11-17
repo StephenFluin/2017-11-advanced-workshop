@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +10,13 @@ import { map } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
   repos;
-  constructor(http: HttpClient) {
-    const path = 'https://api.github.com/search/repositories?q=angular';
-    this.repos = http.get<any>(path).pipe(
+  constructor(http: HttpClient, route: ActivatedRoute) {
+    const path = 'https://api.github.com/search/repositories?q=';
+    this.repos = route.params.pipe(
+      switchMap(params => {
+        const term = params['term'] ? params['term'] : 'angular';
+        return http.get<any>(`${path}${term}`);
+      }),
       map(results => results.items)
     );
   }

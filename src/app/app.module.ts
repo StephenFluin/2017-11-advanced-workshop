@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
+      { path: 'search/:term', component: HomeComponent },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
     ]),
   ],
