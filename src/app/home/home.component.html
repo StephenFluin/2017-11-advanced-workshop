@@ -1,3 +1,4 @@
-<p>
-  home works!
-</p>
+<div *ngFor="let repo of repos | async">
+  <h2>{{ repo.name }}</h2>
+  <p>{{ repo.description }}</p>
+</div>
