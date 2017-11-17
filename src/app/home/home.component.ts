@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, switchMap, startWith } from 'rxjs/operators';
+import { map, switchMap, startWith, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -17,7 +17,8 @@ export class HomeComponent implements OnInit {
         const term = params['term'] ? params['term'] : 'angular';
         return http.get<any>(`${path}${term}`);
       }),
-      map(results => results.items)
+      map(results => results.items),
+      shareReplay(1)
     );
 
     this.repos.subscribe(list => {
