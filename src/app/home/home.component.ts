@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, switchMap, startWith, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
+
+
 
 @Component({
   selector: 'app-home',
@@ -10,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   repos;
+  storage = !environment.server ? localStorage : {};
   constructor(http: HttpClient, route: ActivatedRoute) {
     const path = 'https://api.github.com/search/repositories?q=';
     this.repos = route.params.pipe(
@@ -22,10 +26,10 @@ export class HomeComponent implements OnInit {
     );
 
     this.repos.subscribe(list => {
-      localStorage['listCache'] = JSON.stringify(list);
+      this.storage['listCache'] = JSON.stringify(list);
     });
     this.repos = this.repos.pipe(
-      startWith(JSON.parse(localStorage['listCache'] || '[]'))
+      startWith(JSON.parse(this.storage['listCache'] || '[]'))
     );
   }
 

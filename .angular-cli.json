@@ -28,6 +28,28 @@
         "prod": "environments/environment.prod.ts"
       },
       "serviceWorker": true
+    },
+    {
+      "platform": "server",
+      "root": "src",
+      "outDir": "dist-server",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.server.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.server.json",
+      "prefix": "app",
+      "styles": [
+        "styles.css"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.server.ts",
+        "prod": "environments/environment.server.ts"
+      }
     }
   ],
   "e2e": {

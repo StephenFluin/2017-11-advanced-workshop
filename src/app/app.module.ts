@@ -10,14 +10,14 @@ import { environment } from '../environments/environment';
 @NgModule({
   declarations: [AppComponent, HomeComponent],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({appId: 'my-app'}),
     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'search/:term', component: HomeComponent },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
     ]),
-    environment.production
+    (environment.production && !environment.server)
       ? ServiceWorkerModule.register('ngsw-worker.js')
       : [],
   ],
